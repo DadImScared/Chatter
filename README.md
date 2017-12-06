@@ -9,7 +9,7 @@ Create a folder in the root directory called config and put the following files 
 * dev.json
 * test.json
 
-they should container a key of "DBHost" with a value of the mongodb uri.
+they should contain a key of "DBHost" with a value of the mongodb uri.
 
 Then create a .env file at the root directory and put the following key with whatever value you want
 * SECRET_KEY
