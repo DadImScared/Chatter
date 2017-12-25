@@ -6,8 +6,6 @@ const passport = require('passport');
 const { Conversation, Message } = require('../models');
 
 router.get('/conversations', passport.authenticate('jwt', { session: false }), async function(req, res) {
-  // console.log(await Conversation.find({}));
-  // console.log(await Message.find({}));
   const conversations = await Conversation.aggregate({ $addFields: {
     "otherUser": { $filter: {
       input: '$participants',

@@ -59,7 +59,7 @@ class Room extends Component {
       roomMembers: [],
       inputVal: '',
       isUsersOpen: false
-    }
+    };
   }
 
   async componentDidMount() {
@@ -84,20 +84,25 @@ class Room extends Component {
     });
     socket.on('userLeftRoom', user => {
       this.setState({
-        roomMembers: _.uniqBy(_.filter([...this.state.roomMembers], function(o) {return o._id !== user._id}), function(e) {return e._id})
-      }, () => {updateUsers(this.state.roomMembers.length)});
+        roomMembers: _.uniqBy(_.filter(this.state.roomMembers, ({ _id }) => _id !== user._id), ({ _id }) => _id)
+      }, () => updateUsers(this.state.roomMembers.length));
     });
   };
 
   sendMessage = () => {
     const { socket, match: { params: { room } } } = this.props;
     if (this.state.inputVal) {
-      this.setState({ messages: [...this.state.messages, {
+      const { inputVal: message } = this.state;
+      const newRoomMessage = {
         sender: "me",
         createdAt: Date.now(),
-        message: this.state.inputVal
-      }], inputVal: ''});
-      socket.emit('roomMessage', { room, message: this.state.inputVal })
+        message
+      };
+      this.setState({
+        messages: [...this.state.messages, newRoomMessage],
+        inputVal: ''
+      });
+      socket.emit('roomMessage', { room, message });
     }
   };
 
@@ -117,12 +122,12 @@ class Room extends Component {
       socket.emit('leaveRoom', oldRoom);
       socket.emit('joinRoom', newProps.match.params.room);
       try {
-        const { data } = await axios.get(`/api/v1/rooms/${newRoom}/onlineusers`);
+        const { data: roomMembers } = await axios.get(`/api/v1/rooms/${newRoom}/onlineusers`);
         updateRoom(newRoom);
-        updateUsers(data.length);
-        this.setState({ messages: [], roomMembers: data })
+        updateUsers(roomMembers.length);
+        this.setState({ messages: [], roomMembers })
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   }
@@ -138,7 +143,7 @@ class Room extends Component {
     });
     return (
       <List className={classes.messageList}>{messages}</List>
-    )
+    );
   };
 
   renderRoomMembers = () => {
@@ -215,7 +220,6 @@ class Room extends Component {
             label="Message input"
             placeholder="Enter your message here"
             value={this.state.inputVal}
-
             onChange={(e) => {this.setState({ inputVal: e.target.value })}}
           />
         </div>
@@ -223,7 +227,7 @@ class Room extends Component {
           <Button raised color={'primary'} onClick={this.sendMessage}>Send message</Button>
         </div>
       </div>
-    )
+    );
   }
 }
 

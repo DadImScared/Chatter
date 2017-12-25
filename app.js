@@ -13,8 +13,6 @@ const _ = require('lodash');
 require('dotenv').config();
 
 const transporter = require('./mail/index');
-// const User = require('./models/user');
-// const Room = require('./models/room');
 
 const { User, Room, RoomMessage, Message, Conversation } = require('./models');
 
@@ -95,14 +93,10 @@ io.on('connection', (socket) => {
     username: socket.user.username,
     _id: socket.user.id
   };
-  socket.on('message', (data) => {
-    // console.log(data);
-  });
 
   socket.on('joinRoom', (room) => {
     socket.join(room);
     io.to(room).emit('userJoinedRoom', socket.user);
-    // socket.broadcast.to(socket.currentRoom).emit('userJoinedRoom', socket.user);
   });
 
   socket.on('leaveRoom', (room) => {
@@ -150,8 +144,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    // emit disconnect event to client
-    // delete key of socket.user._id in onlineUsers
     delete onlineUsers[socket.user._id]
   });
 });
