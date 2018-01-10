@@ -39,6 +39,10 @@
         "asyncArrow": "always"
       }],
     "prefer-destructuring": "error",
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "single", {
+      "allowTemplateLiterals": true
+    }],
+    "brace-style": ["error", "stroustrup"]
   }
 }

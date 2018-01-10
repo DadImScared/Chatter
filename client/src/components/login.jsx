@@ -5,7 +5,6 @@ import { withStyles } from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import Grid from 'material-ui/Grid';
 import axios from 'axios';
 import { container } from '../styles/container.css';
 
@@ -19,10 +18,10 @@ const styles = (theme) => ({
   },
   container: {
     extend: container,
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2
   },
   errorMessage: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing.unit * 2
   }
 });
 
@@ -47,14 +46,17 @@ class Login extends Component{
       );
       setLogin(true, token);
       this.props.history.push('/rooms');
-    } catch (e) {
+    }
+    catch (e) {
       // display login error
       console.log(e.response);
       if (e.response.status === 400) {
-        this.setState({ loginError: username ? "Password required":"Username required" });
-      } else if (e.response.status === 401) {
-        this.setState({ loginError: "Bad username or password" });
-      } else {
+        this.setState({ loginError: username ? 'Password required' : 'Username required' });
+      }
+      else if (e.response.status === 401) {
+        this.setState({ loginError: 'Bad username or password' });
+      }
+      else {
         this.setState({ loginError: e.response.data });
       }
     }
@@ -69,10 +71,7 @@ class Login extends Component{
             this.state.loginError ?
               <Typography className={classes.errorMessage} color="error">
                 {this.state.loginError}
-              </Typography>
-
-              :
-              null
+              </Typography> : null
           }
           <div className={classes.fieldStyle}>
             <TextField
@@ -94,7 +93,7 @@ class Login extends Component{
           </Button>
         </Paper>
       </div>
-    )
+    );
   }
 }
 

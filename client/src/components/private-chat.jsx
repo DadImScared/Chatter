@@ -29,7 +29,7 @@ const styles = theme => ({
     position: 'relative',
     display: 'flex',
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   drawerHeader: theme.mixins.toolbar,
   drawerPaper: {
@@ -46,7 +46,7 @@ const styles = theme => ({
     overflowY: 'auto',
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
+      width: `calc(100% - ${drawerWidth}px)`
     }
   },
   messageListItem: {
@@ -58,7 +58,7 @@ const styles = theme => ({
 });
 
 function Transition(props) {
-  return <Slide direction="up" {...props} />;
+  return <Slide direction='up' {...props} />;
 }
 
 class PrivateChat extends Component {
@@ -67,7 +67,7 @@ class PrivateChat extends Component {
     this.state = {
       mobileNavOpen: false,
       messageVal: ''
-    }
+    };
   }
 
   toggleMobileNav = () => {
@@ -82,18 +82,24 @@ class PrivateChat extends Component {
         <ListItem onClick={() => switchChat(key)} className={`${key === activeChat ? classes.activeChat:''}`} key={i}>
           <ListItemText primary={`${chat[key].username}`} secondary={`${chat[key].unread ? `unread ${chat[key].unread}`:''}`} />
         </ListItem>
-      )
+      );
     });
 
     return (
       <List>
         {chatList}
       </List>
-    )
+    );
   };
 
+  sendMessage() {
+    const { sendMessage } = this.props;
+    sendMessage(this.state.messageVal);
+    this.setState({ messageVal: '' });
+  }
+
   render() {
-    const { isOpen, closeChat, classes, activeChat, chat, sendMessage } = this.props;
+    const { isOpen, closeChat, classes, activeChat, chat } = this.props;
     return (
       <Dialog
         fullScreen
@@ -115,9 +121,7 @@ class PrivateChat extends Component {
                 activeChat ?
                   <Typography type="title" color="contrast">
                     {chat[activeChat].username}
-                  </Typography>
-                  :
-                  null
+                  </Typography> : null
               }
             </Toolbar>
           </AppBar>
@@ -131,8 +135,8 @@ class PrivateChat extends Component {
           >
             {this.renderChatList()}
           </ResponsiveDrawer>
-          <div style={{ width: "100%", marginTop: "100px"}}>
-            <div style={{ height: "300px", width: "100%"}}>
+          <div style={{ width: '100%', marginTop: '100px' }}>
+            <div style={{ height: '300px', width: '100%' }}>
               <MessageArea
                 classes={{
                   list: classes.messageList,
@@ -148,20 +152,16 @@ class PrivateChat extends Component {
                   <div>
                     <TextField
                       value={this.state.messageVal}
-                      onChange={(e) => this.setState({ messageVal: e.target.value})}
+                      onChange={({ target: { value } }) => this.setState({ messageVal: value })}
                     />
                   </div>
-                  <Button raised color={"primary"} onClick={
-                    () => {sendMessage(this.state.messageVal); this.setState({ messageVal: '' })}
-                  }>Click</Button>
-                </div>
-                :
-                null
+                  <Button raised color={'primary'} onClick={() => this.sendMessage()}>Click</Button>
+                </div> : null
             }
           </div>
         </div>
       </Dialog>
-    )
+    );
   }
 }
 

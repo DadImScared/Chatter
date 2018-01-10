@@ -1,23 +1,25 @@
 
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 
 const Conversation = new Schema({
-    participants: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+  participants: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 Conversation.statics.findOrCreate = async function(participants) {
-  const conversationObj = new this();
+  const newConversation = new this();
   try {
     const conversation = await this.findOne({ participants: { $all: participants } });
     if (conversation) {
       return conversation;
-    } else {
-      conversationObj.participants = participants;
-      return await conversationObj.save();
     }
-  } catch (e) {
+    else {
+      newConversation.participants = participants;
+      return await newConversation.save();
+    }
+  }
+  catch (e) {
     throw e;
   }
 };

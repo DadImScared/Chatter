@@ -2,9 +2,6 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import Hidden from 'material-ui/Hidden';
-import Divider from 'material-ui/Divider';
-import List, { ListItem, ListItemText } from 'material-ui/List';
-
 
 const ResponsiveDrawer = ({ drawerClasses, anchor = 'left', children, isOpen, handleClose, id  }) => {
   return (
@@ -31,7 +28,7 @@ const ResponsiveDrawer = ({ drawerClasses, anchor = 'left', children, isOpen, ha
         </Drawer>
       </Hidden>
     ]
-  )
+  );
 };
 
 export default ResponsiveDrawer;

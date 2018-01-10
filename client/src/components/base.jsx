@@ -1,20 +1,15 @@
 
 import React, { Component } from 'react';
-import _ from 'lodash'
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import { createMuiTheme } from 'material-ui/styles';
-import purple from 'material-ui/colors/purple';
 import deepPurple from 'material-ui/colors/deepPurple';
 import teal from 'material-ui/colors/teal';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Snackbar from 'material-ui/Snackbar';
 import Button from 'material-ui/Button';
 import Badge from 'material-ui/Badge';
-import IconButton from 'material-ui/IconButton';
-import { Close } from 'material-ui-icons';
 import ChatIcon from 'material-ui-icons/Chat';
 import io from 'socket.io-client';
 import Cookie from 'js-cookie';
@@ -26,22 +21,22 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: deepPurple,
-    secondary: teal,
+    secondary: teal
   }
 });
 
-const styles = them => ({
+const styles = () => ({
   root: {
     textAlign: 'center',
-    paddingTop: 200,
+    paddingTop: 200
   },
   floatingButton: {
-    position: "fixed",
-    bottom: "10vh",
-    right: "10vw"
+    position: 'fixed',
+    bottom: '10vh',
+    right: '10vw'
   },
   hide: {
-    display: "none"
+    display: 'none'
   },
   badgeColor: {
     backgroundColor: theme.palette.primary[800]
@@ -82,17 +77,18 @@ class Base extends Component {
           recentMessage: obj.lastMessage,
           messages: obj.messages,
           unread: 0
-        }
+        };
       }
-      this.setState({ privateChat})
-    } catch (e) {
+      this.setState({ privateChat });
+    }
+    catch (e) {
       console.log(e);
     }
   };
 
   sendPrivateMessage = (message) => {
-    const newChat = {...this.state.privateChat};
-    const newMessage = { message, sender: "me", createdAt: Date.now() };
+    const newChat = { ...this.state.privateChat };
+    const newMessage = { message, sender: 'me', createdAt: Date.now() };
     newChat[this.state.activeChat] = {
       ...newChat[this.state.activeChat],
       messages: [
@@ -107,7 +103,7 @@ class Base extends Component {
   };
 
   switchActiveChat = (newId) => {
-    const newChat = {...this.state.privateChat};
+    const newChat = { ...this.state.privateChat };
     newChat[newId] = {
       ...newChat[newId],
       unread: 0
@@ -116,8 +112,7 @@ class Base extends Component {
   };
 
   openChat = (userId, username) => {
-    const { privateChat } = this.state;
-    const newChat = {...privateChat};
+    const newChat = { ...this.state.privateChat };
     if (!newChat[userId]) {
       newChat[userId] = {
         username,
@@ -133,7 +128,7 @@ class Base extends Component {
     this.setState({
       privateChat: newChat,
       activeChat: userId,
-      isChatOpen: true,
+      isChatOpen: true
     });
   };
 
@@ -168,13 +163,14 @@ class Base extends Component {
     if (unreadMessages) {
       content = <Badge
         classes={{ colorPrimary: classes.badgeColor }}
-        color={"primary"}
+        color={'primary'}
         badgeContent={unreadMessages}
       >
         <ChatIcon />
-      </Badge>
-    } else {
-      content = <ChatIcon />
+      </Badge>;
+    }
+    else {
+      content = <ChatIcon />;
     }
     return (content);
   };
@@ -187,26 +183,22 @@ class Base extends Component {
     }
     socket.on('privateMessage', data => {
       const { privateChat, isChatOpen, activeChat } = this.state;
-      const newChat = {...privateChat};
+      const newChat = { ...privateChat };
       const newMessages = newChat[data.sender._id] && newChat[data.sender._id].messages || [];
+      const unread = activeChat === data.sender._id ? 0 :
+        privateChat[data.sender._id] && privateChat[data.sender._id].unread ?
+          privateChat[data.sender._id].unread + 1 : 1;
       newChat[data.sender._id] = {
         username: data.sender.username,
         messages: [...newMessages, data],
-        unread: activeChat === data.sender._id ?
-          0
-          :
-          privateChat[data.sender._id] && privateChat[data.sender._id].unread ?
-            privateChat[data.sender._id].unread + 1
-            :
-            1
-        ,
+        unread,
         recentMessage: data
       };
       // const sortedChat = _.sortBy(newChat, [function(obj) {return obj.recentMessage.createdAt}]);
       this.setState({
         unreadMessages: isChatOpen ? 0:this.state.unreadMessages + 1,
         privateChat: newChat
-      })
+      });
     });
   }
 
@@ -223,7 +215,7 @@ class Base extends Component {
           <Navbar logout={this.logout} loggedIn={this.state.loggedIn} />
           <Main socket={socket} openPrivateChat={this.openChat} loggedIn={this.state.loggedIn} setLogin={this.setLogin} />
           <PrivateChat
-            chat={{...privateChat}}
+            chat={{ ...privateChat }}
             isOpen={isChatOpen}
             closeChat={this.togglePrivateChat}
             activeChat={activeChat}
@@ -239,14 +231,14 @@ class Base extends Component {
               }
             )}
             fab
-            color={"primary"}
-            aria-label={"message"}
+            color={'primary'}
+            aria-label={'message'}
           >
             {this.renderBadge()}
           </Button>
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

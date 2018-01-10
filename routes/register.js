@@ -1,5 +1,5 @@
 
-require('dotenv').load({path: '../.env'});
+require('dotenv').load({ path: '../.env' });
 const { check, validationResult } = require('express-validator/check');
 const { matchedData } = require('express-validator/filter');
 const jwt = require('jsonwebtoken');
@@ -7,14 +7,14 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
 
-
 router.post('/', [
-  check('username').trim()
-    .custom(async value => {
+  check('username')
+    .trim()
+    .custom(async (value) => {
       try {
-        const user = await User.findOne({"username": value});
+        const user = await User.findOne({ 'username': value });
         if (user) {
-          throw new Error('Username taken');
+          throw 'Username taken';
         }
         return value;
       } catch(e) {
@@ -22,7 +22,7 @@ router.post('/', [
       }
     }),
   check('password', 'passwords must be at least 5 chars long')
-    .isLength({min: 5}),
+    .isLength({ min: 5 }),
   check('confirmPass', 'passwords must match')
     .custom((value, { req }) => value === req.body.password)
 ], function(req, res, next) {
@@ -37,8 +37,10 @@ router.post('/', [
     }
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '10h' });
     res.status(201).json({ token });
-  })
+  });
 });
 
-
-module.exports = router;
+module.exports = {
+  route: router,
+  path: '/register'
+};

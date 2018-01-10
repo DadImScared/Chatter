@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const Friends = new Schema({
   user1: {
@@ -16,6 +16,5 @@ const Friends = new Schema({
     default: 'sent'
   }
 });
-
 
 module.exports = mongoose.model('Friends', Friends);

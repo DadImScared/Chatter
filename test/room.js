@@ -34,7 +34,7 @@ describe('Room', function() {
           data.should.be.an('object');
           data['room'].should.equal('firstroom');
           data['message'].should.equal('taco');
-          data['creator']['username'].should.equal('tom');
+          data['sender']['username'].should.equal('tom');
         });
       }
       setTimeout(() => {cleanUpClients(clients); done()}, 500);

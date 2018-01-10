@@ -2,20 +2,20 @@
 import React, { Component } from 'react';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
-
 class MessageArea extends Component {
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
     this.state = {
-      lockScroll: true,
-    }
+      lockScroll: true
+    };
   }
 
   handleScroll = () => {
     if (Math.ceil(this.listEle.scrollHeight - this.listEle.scrollTop) === this.listEle.clientHeight) {
       // bottom of div
       if (!this.state.lockScroll) this.setState({ lockScroll: true });
-    } else {
+    }
+    else {
       // not bottom of div
       if (this.state.lockScroll) this.setState({ lockScroll: false });
     }
@@ -28,7 +28,7 @@ class MessageArea extends Component {
         <ListItem className={classes.listItem} key={`${listId}-item-${i}`}>
           <ListItemText primary={`${message.sender && message.sender === 'me' ? 'me':message.sender.username}: ${message.message}`}/>
         </ListItem>
-      )
+      );
     });
   };
 
@@ -52,7 +52,7 @@ class MessageArea extends Component {
       <List id={`dummy-${this.props.listId}`} rootRef={(el) => this.listEle = el} onWheel={this.handleScroll} className={this.props.classes.list}>
         {this.renderMessages()}
       </List>
-    )
+    );
   }
 }
 

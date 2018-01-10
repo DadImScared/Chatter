@@ -8,7 +8,6 @@ import Button from 'material-ui/Button';
 import ResponsiveDrawer from './responsive-drawer';
 import IconButton from 'material-ui/IconButton';
 import CommentIcon from 'material-ui-icons/Comment';
-import Paper from 'material-ui/Paper';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 
@@ -80,21 +79,21 @@ class Room extends Component {
     socket.on('userJoinedRoom', user => {
       this.setState({
         roomMembers: _.sortBy([...this.state.roomMembers, user], [function(obj) {return obj.username}])
-        }, () => {updateUsers(this.state.roomMembers.length)});
+      }, () => updateUsers(this.state.roomMembers.length));
     });
     socket.on('userLeftRoom', user => {
       this.setState({
         roomMembers: _.uniqBy(_.filter(this.state.roomMembers, ({ _id }) => _id !== user._id), ({ _id }) => _id)
       }, () => updateUsers(this.state.roomMembers.length));
     });
-  };
+  }
 
   sendMessage = () => {
     const { socket, match: { params: { room } } } = this.props;
     if (this.state.inputVal) {
       const { inputVal: message } = this.state;
       const newRoomMessage = {
-        sender: "me",
+        sender: 'me',
         createdAt: Date.now(),
         message
       };
@@ -132,20 +131,6 @@ class Room extends Component {
     }
   }
 
-  renderMessages = () => {
-    const { classes } = this.props;
-    const messages = this.state.messages.map((message, i) => {
-      return (
-        <ListItem className={classes.messageListItem} key={i}>
-          <ListItemText primary={`${message.creator === 'me' ? 'me':message.creator.username}: ${message.message}`}/>
-        </ListItem>
-      )
-    });
-    return (
-      <List className={classes.messageList}>{messages}</List>
-    );
-  };
-
   renderRoomMembers = () => {
     const users = this.state.roomMembers.map((user, i) => {
       return (
@@ -157,36 +142,13 @@ class Room extends Component {
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-      )
+      );
     });
     return (
       <List >
         {users}
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
-        <ListItem>awdawd</ListItem>
       </List>
-    )
+    );
   };
 
   render() {

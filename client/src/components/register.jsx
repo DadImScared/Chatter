@@ -4,7 +4,6 @@ import _ from 'lodash';
 import axios from 'axios';
 import { withStyles } from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
-import Cookie from 'js-cookie';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import { container } from '../styles/container.css';
@@ -19,17 +18,18 @@ const styles = theme => ({
   },
   container: {
     extend: container,
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2
   }
 });
 
 const passwordValidator = (props, { form: { password, confirmPass }, formErrors }, id, setState) => {
-  const newErrors = {...formErrors};
+  const newErrors = { ...formErrors };
   if (password !== confirmPass && confirmPass && password) {
     newErrors['password'] = 'passwords must match';
     newErrors['confirmPass'] = 'passwords must match';
 
-  } else {
+  }
+  else {
     newErrors['password'] = '';
     newErrors['confirmPass'] = '';
   }
@@ -39,18 +39,20 @@ const passwordValidator = (props, { form: { password, confirmPass }, formErrors 
 const formFields = [
   { id: 'username', labelText: 'Username',
     validator: async (props, state, id, setState) => {
-      const newErrors = {...state.formErrors};
+      const newErrors = { ...state.formErrors };
       try {
         const { data: { message } } = await axios.post(
           '/api/v1/userexists', { username: state.form.username }, { headers: { contentType: 'application/json' } }
-          );
+        );
         if (message) {
           newErrors[id] = 'Username taken';
-        } else {
+        }
+        else {
           newErrors[id] = '';
         }
-      } catch (e) {
-        console.log(e.response);
+      }
+      catch(e) {
+        console.error(e.response);
       }
       setState({ formErrors: newErrors });
     }
@@ -74,7 +76,7 @@ class Register extends Component {
   }, 500);
 
   updateForm = ({ target: { value } }, id, validator) => {
-    const newForm = {...this.state.form};
+    const newForm = { ...this.state.form };
     newForm[id] = value;
     this.setState({ form: newForm });
     if (validator) {
@@ -89,14 +91,15 @@ class Register extends Component {
         '/api/v1/register',
         { username, password, confirmPass },
         { headers: { contentType: 'application/json' } }
-        );
+      );
       this.props.setLogin(true, token);
-      this.props.history.push('/rooms')
-    } catch (e) {
+      this.props.history.push('/rooms');
+    }
+    catch(e) {
       const { data: { error } } = e.response;
       const errors = { ...this.state.formErrors };
-      for (let key of Object.keys(error)) {
-        errors[key] = error[key].msg
+      for (const key of Object.keys(error)) {
+        errors[key] = error[key].msg;
       }
       this.setState({ formErrors: errors });
     }
@@ -120,15 +123,15 @@ class Register extends Component {
                     helperText={this.state.formErrors[id] || ''}
                   />
                 </div>
-              )
+              );
             })
           }
-          <Button className={classes.fieldStyle} raised color="primary" onClick={this.registerUser}>
+          <Button className={classes.fieldStyle} raised color='primary' onClick={this.registerUser}>
             Submit
           </Button>
         </Paper>
       </div>
-    )
+    );
   }
 }
 

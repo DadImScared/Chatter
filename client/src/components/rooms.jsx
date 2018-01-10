@@ -1,9 +1,8 @@
 
 import React, { Component } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom'
+import { Switch, Route, NavLink } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
-import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import List, { ListItem, ListItemText } from 'material-ui/List';
@@ -16,19 +15,17 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
-import Divider from 'material-ui/Divider';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import _ from 'lodash';
 import ResponsiveDrawer from './responsive-drawer';
 import Room from '../components/room';
-import { container } from '../styles/container.css';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   roomHeight: {
-    height: 'calc(100vh - 180px)',
+    height: 'calc(100vh - 180px)'
   },
   root: {
     display: 'flex',
@@ -80,7 +77,7 @@ const styles = theme => ({
   },
   breakWord: {
     wordBreak: 'break-all'
-  },
+  }
 });
 
 
@@ -108,7 +105,7 @@ class Rooms extends Component {
 
   createRoom = async () => {
     try {
-      const { data } = await axios.post(
+      await axios.post(
         '/api/v1/rooms',
         { room: this.state.inputVal },
         {
@@ -117,11 +114,12 @@ class Rooms extends Component {
             'Content-Type': 'application/json'
           }
         }
-        );
+      );
       this.setState({ inputVal: '' });
-    } catch (e) {
+    }
+    catch (e) {
       const { data: { error } } = e.response;
-      this.setState({ inputError: error['room'].msg })
+      this.setState({ inputError: error['room'].msg });
     }
   };
 
@@ -137,35 +135,36 @@ class Rooms extends Component {
     const { socket } = this.props;
     try {
       const { data } = await axios.get('/api/v1/rooms');
-      this.setState({ rooms: _.sortBy(data, [function(obj) {return obj.name.toLowerCase()}]) });
-    } catch (e) {
-      console.log(e);
+      this.setState({ rooms: _.sortBy(data, [ obj => obj.name.toLowerCase() ]) });
+    }
+    catch (e) {
+      console.error(e);
     }
     socket.on('newRoom', room => {
       const allRooms = [...this.state.rooms, room];
-      const sortedRooms = _.sortBy(allRooms, [function(obj) {return obj.name.toLowerCase()}]);
+      const sortedRooms = _.sortBy(allRooms, [ obj => obj.name.toLowerCase() ]);
       this.setState({ rooms: sortedRooms });
     });
   }
 
   renderUsersButton = () => {
     const buttonContent = (
-      <Badge color={"secondary"} badgeContent={this.state.currentRoomUserCount}>
+      <Badge color={'secondary'} badgeContent={this.state.currentRoomUserCount}>
         <PeopleIcon />
       </Badge>
     );
     return [
       <Hidden lgUp key={'mobile-visible-nav'}>
-        <IconButton onClick={this.toggleUserNav} aria-label={"Room members button mobile"} color={"accent"}>
+        <IconButton onClick={this.toggleUserNav} aria-label={'Room members button mobile'} color={'accent'}>
           {buttonContent}
         </IconButton>
       </Hidden>,
       <Hidden lgDown key={'desktop-visible-nav'}>
-        <IconButton aria-label={"Room members button"} color={"accent"}>
+        <IconButton aria-label={'Room members button'} color={'accent'}>
           {buttonContent}
         </IconButton>
       </Hidden>
-    ]
+    ];
   };
 
   renderRooms = () => {
@@ -175,13 +174,13 @@ class Rooms extends Component {
         <ListItem onClick={this.mobileNavToggle} component={NavLink} className={classes.breakWord} activeClassName={`${classes.activeLink} `} to={`/rooms/${room.name}`} key={index}>
           <ListItemText primary={room.name} />
         </ListItem>
-      )
+      );
     });
     return (
-      <List style={{ height: "50vh" }}>
+      <List style={{ height: '50vh' }}>
         {rooms}
       </List>
-    )
+    );
   };
 
   render() {
@@ -201,10 +200,10 @@ class Rooms extends Component {
               Submit
             </Button>
           </div>
-          <Grid container style={{ position: 'relative'}}>
+          <Grid container style={{ position: 'relative' }}>
             <AppBar className={classes.appBar}>
               <Toolbar className={classes.toolBar}>
-                <IconButton onClick={this.mobileNavToggle} className={classes.hideMenuIcon} aria-label={"Room list menu"} color="contrast">
+                <IconButton onClick={this.mobileNavToggle} className={classes.hideMenuIcon} aria-label={'Room list menu'} color="contrast">
                   <MenuIcon />
                 </IconButton>
                 <Typography className={classes.breakWord} type="title" color="contrast">
@@ -217,8 +216,8 @@ class Rooms extends Component {
               isOpen={this.state.mobileNavOpen}
               handleClose={this.mobileNavToggle}
               drawerClasses={{
-                  paper: classes.drawerPaper
-                }}
+                paper: classes.drawerPaper
+              }}
               id={'room-nav'}
             >
               {this.renderRooms()}
@@ -246,7 +245,7 @@ class Rooms extends Component {
           </Grid>
         </Grid>
       </Grid>
-    )
+    );
   }
 }
 

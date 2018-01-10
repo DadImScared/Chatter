@@ -1,24 +1,22 @@
 
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
-import { Switch, Route } from 'react-router-dom'
-import Paper from 'material-ui/Paper';
-import Grid from 'material-ui/Grid';
+import { Switch, Route } from 'react-router-dom';
 import Home from './home';
 import Login from './login';
 import Register from './register';
-import Rooms from "./rooms";
+import Rooms from './rooms';
 
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 30,
+    marginTop: 30
   },
   paper: {
     padding: 16,
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.secondary
   },
   mainArea: {
     display: 'flex',
@@ -27,24 +25,21 @@ const styles = theme => ({
   },
   paperBackground: {
     [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 64px)',
+      minHeight: 'calc(100vh - 64px)'
 
     },
     [`${theme.breakpoints.down('md')} and (orientation: landscape)`]: {
-      minHeight: 'calc(100vh + 80px)',
+      minHeight: 'calc(100vh + 80px)'
     },
-    // [`${theme.breakpoints.up('xs')}`]: {
-    //   minHeight: '100vh'
-    // },
     minHeight: 'calc(100vh - 56px)',
-    backgroundColor: theme.palette.shades.dark.background.paper,
+    backgroundColor: theme.palette.shades.dark.background.paper
   }
 });
 
 
 class Main extends Component {
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
   }
 
   render() {
@@ -65,7 +60,7 @@ class Main extends Component {
           <Route path='/rooms' render={(props) => <Rooms {...props} openPrivateChat={openPrivateChat} socket={socket} />} />
         </Switch>
       </div>
-    )
+    );
   }
 }
 
