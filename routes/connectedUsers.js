@@ -1,8 +1,11 @@
 
-const { onlineUsers } = require('./io/connection');
+const express = require('express');
+const router = express.Router();
 
-exports.override = function(app) {
-  app.get('/api/connectedusers', function(req, res) {
-    res.json({ users: Object.values(onlineUsers) });
+
+module.exports = function(userList) {
+  router.get('/connectedusers', function(req, res) {
+    res.json({ users: Object.values(userList) });
   });
+  return router
 };
